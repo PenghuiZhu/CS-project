@@ -1,0 +1,216 @@
+{
+  "admins": [
+    {
+      "firstname": "admin",
+      "surname": "admin",
+      "email": "admin@umsystem.edu",
+      "password": 123456,
+      "id": 1
+    }
+  ],
+  "courses": [
+    {
+      "coursenumber": "CS 101",
+      "coursename": "Introduction to Computer Science",
+      "need": "graders",
+      "description": "1111"
+    }
+  ],
+  "drafts": [
+    {
+      "draftcoursenumber": "CS 191",
+      "draftcoursename": "Introduction to Computer",
+      "draftneed": "graders",
+      "draftdescription": "1111"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "firstname": "Hui",
+      "surname": "Jin",
+      "currentlevel": "BS",
+      "semester": 2024,
+      "major": "CS",
+      "email": "hj111@umsystem.edu",
+      "studentId": "123456",
+      "password": 123456
+    },
+    {
+      "id": 2,
+      "firstname": "Penghui",
+      "surname": "Zhu",
+      "currentlevel": "PHD",
+      "semester": 2023,
+      "major": "CS",
+      "email": "ph112@umsystem.edu",
+      "studentId": "234567",
+      "password": 123456
+    },
+    {
+      "firstname": "test",
+      "surname": "test",
+      "currentlevel": "MS",
+      "semester": "2028",
+      "major": "IT",
+      "email": "yz123@umsystem.edu",
+      "studentId": "123456",
+      "password": 123456,
+      "id": 3
+    }
+  ],
+  "children": [
+    {
+      "id": 3,
+      "label": "AddUser",
+      "rightId": 2,
+      "key": "/user-manage/add",
+      "grade": "2"
+    },
+    {
+      "id": 4,
+      "label": "DeleteUser",
+      "rightId": 2,
+      "key": "/user-manage/delete",
+      "grade": "2"
+    },
+    {
+      "id": 5,
+      "label": "UpdateUser",
+      "rightId": 2,
+      "key": "/user-manage/update",
+      "grade": "2"
+    },
+    {
+      "id": 6,
+      "label": "UserList",
+      "rightId": 2,
+      "key": "/user-manage/list",
+      "grade": "2",
+      "pagepermisson": "1"
+    },
+    {
+      "id": 8,
+      "label": "CourseList",
+      "rightId": 7,
+      "key": "/course-manage/list",
+      "grade": "2",
+      "pagepermisson": "1"
+    },
+    {
+      "id": 9,
+      "label": "AddCourse",
+      "rightId": 7,
+      "key": "/course-manage/add",
+      "grade": "2"
+    },
+    {
+      "id": 10,
+      "label": "UpdateCourse",
+      "rightId": 7,
+      "key": "/course-manage/update/:id",
+      "grade": "2"
+    },
+    {
+      "id": 11,
+      "label": "CoursePreview",
+      "rightId": 7,
+      "key": "/course-manage/preview/:id",
+      "grade": "2",
+      "routepermisson": "1"
+    },
+    {
+      "id": 12,
+      "label": "Draft",
+      "rightId": 7,
+      "key": "/course-manage/draft",
+      "pagepermisson": "1",
+      "grade": "2"
+    },
+    {
+      "id": 13,
+      "label": "CourseCategory",
+      "rightId": 7,
+      "key": "/course-manage/category",
+      "pagepermisson": "1",
+      "grade": "2"
+    },
+    {
+      "id": 15,
+      "label": "Unpublish",
+      "rightId": 14,
+      "key": "/publish-manage/unpublish",
+      "pagepermisson": "1",
+      "grade": "2"
+    },
+    {
+      "id": 16,
+      "label": "Publish",
+      "rightId": 14,
+      "key": "/publish-manage/publish",
+      "pagepermisson": "1",
+      "grade": "2"
+    },
+    {
+      "id": 17,
+      "label": "Sunset",
+      "rightId": 14,
+      "key": "/publish-manage/sunset",
+      "pagepermisson": "1",
+      "grade": "2"
+    },
+    {
+      "id": 19,
+      "label": "AuditApplication",
+      "rightId": 18,
+      "key": "/application-audit/audit",
+      "pagepermisson": "1",
+      "grade": "2"
+    },
+    {
+      "id": 20,
+      "label": "AuditList",
+      "rightId": 18,
+      "key": "/application-audit/list",
+      "pagepermisson": "1",
+      "grade": "2"
+    }
+  ],
+  "rights": [
+    {
+      "id": 1,
+      "label": "Home",
+      "key": "/home",
+      "pagepermisson": "1",
+      "grade": "1"
+    },
+    {
+      "id": 2,
+      "label": "UserManage",
+      "key": "/user-manage",
+      "pagepermisson": "1",
+      "grade": "1"
+    },
+    {
+      "id": 7,
+      "label": "CourseManage",
+      "key": "/course-manage",
+      "pagepermisson": "1",
+      "grade": "1"
+    },
+    {
+      "id": 14,
+      "label": "PublishManage",
+      "key": "/publish-manage",
+      "pagepermisson": "1",
+      "grade": "1"
+    },
+    {
+      "id": 18,
+      "label": "ApplicationAudit",
+      "key": "/application-audit",
+      "pagepermisson": "1",
+      "grade": "1"
+    }
+  ]
+}

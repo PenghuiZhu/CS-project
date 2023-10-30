@@ -1,13 +1,8 @@
-import React from 'react';
-import './css/App.css'
-import Login from './components/Login.js';
+import IndexRouter from "./router/IndexRouter";
+import "./App.css";
 
 function App() {
-  return (
-    <div className="App">
-     <Login/>
-    </div>
-  );
+  return <IndexRouter></IndexRouter>
 }
 
 export default App;
