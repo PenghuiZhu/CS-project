@@ -16,6 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `application_course_suitability`
+--
+
+DROP TABLE IF EXISTS `application_course_suitability`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `application_course_suitability` (
+  `application_id` smallint(5) unsigned NOT NULL,
+  `course_id` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`application_id`,`course_id`),
+  KEY `course_id` (`course_id`),
+  CONSTRAINT `application_course_suitability_ibfk_1` FOREIGN KEY (`application_id`) REFERENCES `application_records` (`application_id`),
+  CONSTRAINT `application_course_suitability_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `application_course_suitability`
+--
+
+LOCK TABLES `application_course_suitability` WRITE;
+/*!40000 ALTER TABLE `application_course_suitability` DISABLE KEYS */;
+/*!40000 ALTER TABLE `application_course_suitability` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `application_records`
 --
 
@@ -31,16 +57,19 @@ CREATE TABLE `application_records` (
   `umkc_email` varchar(255) DEFAULT NULL,
   `current_level` varchar(5) DEFAULT NULL,
   `gaduating_semester` varchar(12) DEFAULT NULL,
-  `umkc_gpa` decimal(1,1) DEFAULT NULL,
+  `umkc_gpa` decimal(2,1) DEFAULT NULL,
   `umkc_hours` smallint(5) unsigned DEFAULT NULL,
   `undergrad_degree` varchar(5) DEFAULT NULL,
   `current_major` smallint(5) unsigned DEFAULT NULL,
   `applying_for` varchar(15) NOT NULL,
+  `gta_certified` tinyint(1) DEFAULT NULL,
+  `gta_certification_term` year(4) DEFAULT NULL,
   PRIMARY KEY (`application_id`),
   KEY `applicant_id` (`applicant_id`),
   KEY `current_major` (`current_major`),
   CONSTRAINT `application_records_ibfk_1` FOREIGN KEY (`applicant_id`) REFERENCES `site_users` (`user_id`),
-  CONSTRAINT `application_records_ibfk_2` FOREIGN KEY (`current_major`) REFERENCES `subjects` (`subject_id`)
+  CONSTRAINT `application_records_ibfk_2` FOREIGN KEY (`current_major`) REFERENCES `subjects` (`subject_id`),
+  CONSTRAINT `application_records_chk_gpa_range` CHECK (`umkc_gpa` between 0.0 and 4.0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -54,6 +83,39 @@ LOCK TABLES `application_records` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `completed_courses`
+--
+
+DROP TABLE IF EXISTS `completed_courses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `completed_courses` (
+  `user_id` smallint(5) unsigned NOT NULL,
+  `course_id` smallint(5) unsigned NOT NULL,
+  `course_gpa` decimal(2,1) DEFAULT NULL,
+  PRIMARY KEY (`user_id`,`course_id`),
+  KEY `course_id` (`course_id`),
+  CONSTRAINT `completed_courses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `site_users` (`user_id`),
+  CONSTRAINT `completed_courses_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+  CONSTRAINT `completed_courses_chk_gpa_range` CHECK (`course_gpa` between 0.0 and 4.0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `completed_courses`
+--
+
+LOCK TABLES `completed_courses` WRITE;
+/*!40000 ALTER TABLE `completed_courses` DISABLE KEYS */;
+INSERT INTO `completed_courses` VALUES
+(1,1,4.0),
+(2,1,4.0),
+(3,1,4.0),
+(4,1,4.0);
+/*!40000 ALTER TABLE `completed_courses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `courses`
 --
 
@@ -64,11 +126,12 @@ CREATE TABLE `courses` (
   `course_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `subject_id` smallint(5) unsigned NOT NULL DEFAULT 1,
   `course_number` smallint(5) unsigned NOT NULL,
+  `suffix` varchar(3) DEFAULT NULL,
   `course_name` varchar(255) NOT NULL,
   PRIMARY KEY (`course_id`),
   KEY `subject_id` (`subject_id`),
   CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,6 +140,8 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
+INSERT INTO `courses` VALUES
+(1,1,451,'R','Software Engineering Capstone');
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,13 +155,15 @@ DROP TABLE IF EXISTS `site_users`;
 CREATE TABLE `site_users` (
   `user_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role_id` tinyint(3) unsigned NOT NULL DEFAULT 1,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `site_users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `user_roles` (`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,6 +172,12 @@ CREATE TABLE `site_users` (
 
 LOCK TABLES `site_users` WRITE;
 /*!40000 ALTER TABLE `site_users` DISABLE KEYS */;
+INSERT INTO `site_users` VALUES
+(1,'PenghuiZhu','pz111@umsystem.edu','123456',3),
+(2,'HuiJin','hj112@umsystem.edu','123456',3),
+(3,'jafleeger','jf113@umsystem.edu','123456',3),
+(4,'imrowse','ir114@umsystem.edu','123456',3),
+(5,'Applicant','applicant@umsystem.edu','123456',2);
 /*!40000 ALTER TABLE `site_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,4 +247,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-30 14:59:46
+-- Dump completed on 2023-11-13 22:31:31

@@ -16,7 +16,7 @@ con.connect((err) => {
   console.log('Connected to database as id' + con.threadId);
 });
 
-
+//con.query();
 
 con.end();
 
