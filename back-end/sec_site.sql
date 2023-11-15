@@ -56,7 +56,8 @@ CREATE TABLE `application_records` (
   `student_id` varchar(8) DEFAULT NULL,
   `umkc_email` varchar(255) DEFAULT NULL,
   `current_level` varchar(5) DEFAULT NULL,
-  `gaduating_semester` varchar(12) DEFAULT NULL,
+  `graduating_semester_id` tinyint(3) unsigned DEFAULT NULL,
+  `graduating_year` year(4) NOT NULL,
   `umkc_gpa` decimal(2,1) DEFAULT NULL,
   `umkc_hours` smallint(5) unsigned DEFAULT NULL,
   `undergrad_degree` varchar(5) DEFAULT NULL,
@@ -67,8 +68,10 @@ CREATE TABLE `application_records` (
   PRIMARY KEY (`application_id`),
   KEY `applicant_id` (`applicant_id`),
   KEY `current_major` (`current_major`),
+  KEY `graduating_semester_id` (`graduating_semester_id`),
   CONSTRAINT `application_records_ibfk_1` FOREIGN KEY (`applicant_id`) REFERENCES `site_users` (`user_id`),
   CONSTRAINT `application_records_ibfk_2` FOREIGN KEY (`current_major`) REFERENCES `subjects` (`subject_id`),
+  CONSTRAINT `application_records_ibfk_3` FOREIGN KEY (`graduating_semester_id`) REFERENCES `yearly_semesters` (`semester_id`),
   CONSTRAINT `application_records_chk_gpa_range` CHECK (`umkc_gpa` between 0.0 and 4.0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -111,7 +114,9 @@ INSERT INTO `completed_courses` VALUES
 (1,1,4.0),
 (2,1,4.0),
 (3,1,4.0),
-(4,1,4.0);
+(3,2,4.0),
+(4,1,4.0),
+(4,2,4.0);
 /*!40000 ALTER TABLE `completed_courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +136,7 @@ CREATE TABLE `courses` (
   PRIMARY KEY (`course_id`),
   KEY `subject_id` (`subject_id`),
   CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,7 +146,9 @@ CREATE TABLE `courses` (
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
 INSERT INTO `courses` VALUES
-(1,1,451,'R','Software Engineering Capstone');
+(1,1,451,'R','Software Engineering Capstone'),
+(2,1,490,'WD','Web Development'),
+(3,1,436,NULL,'Digital Forensics');
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,7 +203,7 @@ CREATE TABLE `subjects` (
   UNIQUE KEY `prefix` (`prefix`),
   UNIQUE KEY `department_name` (`subject_name`),
   UNIQUE KEY `subject_name` (`subject_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -206,7 +213,8 @@ CREATE TABLE `subjects` (
 LOCK TABLES `subjects` WRITE;
 /*!40000 ALTER TABLE `subjects` DISABLE KEYS */;
 INSERT INTO `subjects` VALUES
-(1,'CS','Computer Science');
+(1,'CS','Computer Science'),
+(2,'MATH','Mathematics');
 /*!40000 ALTER TABLE `subjects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -237,6 +245,34 @@ INSERT INTO `user_roles` VALUES
 (1,'Guest');
 /*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `yearly_semesters`
+--
+
+DROP TABLE IF EXISTS `yearly_semesters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `yearly_semesters` (
+  `semester_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `semester_name` varchar(32) NOT NULL,
+  PRIMARY KEY (`semester_id`),
+  UNIQUE KEY `semester_name` (`semester_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `yearly_semesters`
+--
+
+LOCK TABLES `yearly_semesters` WRITE;
+/*!40000 ALTER TABLE `yearly_semesters` DISABLE KEYS */;
+INSERT INTO `yearly_semesters` VALUES
+(1,'Fall'),
+(2,'Spring'),
+(3,'Summer');
+/*!40000 ALTER TABLE `yearly_semesters` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -247,4 +283,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-13 22:31:31
+-- Dump completed on 2023-11-15  0:02:20
